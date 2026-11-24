@@ -3,12 +3,31 @@ import { createClient } from "./supabase/server";
 export type PlayerStats = {
   player_id: string;
   epic_name: string;
+  badge: boolean;
   rating_count: number;
   overall: number | null;
   toxicity: number | null;
   teamwork: number | null;
   comms: number | null;
   skill: number | null;
+  last_rated_at: string | null;
+};
+
+export type Review = {
+  id: string;
+  player_id: string;
+  category: string;
+  body: string;
+  created_at: string;
+  helpful: number;
+};
+
+export type RatingStatus = {
+  signed_in?: boolean;
+  daily_limit?: number;
+  left_today?: number;
+  plus?: boolean;
+  already_rated?: boolean;
 };
 
 export async function getUserAndPinned() {

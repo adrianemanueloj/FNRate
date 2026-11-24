@@ -40,8 +40,8 @@ export default function LoginForm({ next }: { next: string }) {
 
   if (sent) {
     return (
-      <div className="notice ok">
-        Check your email! We sent a sign-in link to <b>{email}</b>. Open it on this same device.
+      <div className="notice ok" role="status">
+        <span>Check your email! We sent a sign-in link to <b>{email}</b>. Open it on this same device.</span>
       </div>
     );
   }
@@ -57,6 +57,7 @@ export default function LoginForm({ next }: { next: string }) {
           type="email"
           required
           placeholder="you@example.com"
+          aria-label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
@@ -65,7 +66,7 @@ export default function LoginForm({ next }: { next: string }) {
           Email me a sign-in link
         </button>
       </form>
-      {error && <div className="notice err">{error}</div>}
+      {error && <div className="notice err" role="alert">{error}</div>}
     </div>
   );
 }

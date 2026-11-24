@@ -5,6 +5,11 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORIES, cleanName, profileHref } from "@/lib/categories";
 
+function safeBack(v: FormDataEntryValue | null) {
+  const s = String(v ?? "/");
+  return s.startsWith("/") && !s.startsWith("//") ? s : "/";
+}
+
 function clampScore(v: FormDataEntryValue | null) {
   const n = Math.round(Number(v));
   if (!Number.isFinite(n)) return 50;
@@ -47,7 +52,7 @@ export async function submitRating(_prev: RateState, form: FormData): Promise<Ra
 
 export async function reportReview(form: FormData) {
   const supabase = await createClient();
-  const back = String(form.get("back") ?? "/");
+  const back = safeBack(form.get("back"));
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -57,9 +62,21 @@ export async function reportReview(form: FormData) {
   redirect(`${back}${sep}reported=1#reviews`);
 }
 
+export async function toggleHelpful(form: FormData) {
+  const supabase = await createClient();
+  const back = safeBack(form.get("back"));
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect(`/login?next=${encodeURIComponent(back)}`);
+  const { error } = await supabase.rpc("toggle_helpful", { p_review_id: String(form.get("review_id")) });
+  const sep = back.includes("?") ? "&" : "?";
+  redirect(error ? `${back}${sep}err=${encodeURIComponent(error.message)}#reviews` : `${back}#reviews`);
+}
+
 export async function pinPlayer(form: FormData) {
   const supabase = await createClient();
-  const back = String(form.get("back") ?? "/");
+  const back = safeBack(form.get("back"));
   const {
     data: { user },
   } = await supabase.auth.getUser();

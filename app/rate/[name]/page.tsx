@@ -2,15 +2,17 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import RateForm from "./RateForm";
 import { getUserAndPinned, type RatingStatus } from "@/lib/session";
-import { cleanName, profileHref } from "@/lib/categories";
+import { profileHref } from "@/lib/categories";
+import { isValidName, nameFromParam } from "@/lib/names";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Rate a player" };
 
 export default async function RatePage({ params }: { params: Promise<{ name: string }> }) {
-  const name = cleanName(decodeURIComponent((await params).name));
+  const name = nameFromParam((await params).name);
   const { supabase, user, pinned } = await getUserAndPinned();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/rate/${name}`)}`);
-  if (name.length < 3) redirect("/search");
+  if (!isValidName(name)) redirect("/search");
 
   const { data } = await supabase.rpc("my_rating_status", { p_epic_name: name });
   const s = (data ?? {}) as RatingStatus;
@@ -24,12 +26,12 @@ export default async function RatePage({ params }: { params: Promise<{ name: str
   return (
     <>
       <section className="hero">
-        <span className="eyebrow">Rating</span>
-        <h1 style={{ wordBreak: "break-all" }}>{name}</h1>
+        <span className="label">Rating</span>
+        <h1 style={{ wordBreak: "break-all", textTransform: "none" }}>{name}</h1>
       </section>
       {block ? (
         <div className="stack">
-          <div className="notice info">{block}</div>
+          <div className="notice">{block}</div>
           {!isMine && !s.already_rated && !s.plus && (
             <Link className="btn full" href="/premium">Get more ratings with FNRate Plus</Link>
           )}

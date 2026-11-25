@@ -11,4 +11,5 @@ export const IconPin = (p: P) => (<svg viewBox="0 0 24 24" {...s} {...p}><path d
 export const IconCheck = (p: P) => (<svg viewBox="0 0 24 24" {...s} {...p}><path d="m5 12 5 5L20 7" /></svg>);
 export const IconStar = (p: P) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="m12 2 3 6.6 7 .8-5.2 4.8 1.4 7-6.2-3.6L5.8 21l1.4-7L2 9.4l7-.8z" /></svg>);
 export const IconPlus = (p: P) => (<svg viewBox="0 0 24 24" {...s} {...p}><path d="M12 5v14M5 12h14" /></svg>);
-export const LogoMark = (p: P) => (<svg viewBox="0 0 24 24" fill="#fff" {...p}><path d="M5 3h12l-1.5 4H10l-.6 2.5H15L13.6 13H8.5L6.9 21H3z" /></svg>);
+export const LogoMark = (p: P) => (<svg viewBox="0 0 24 24" fill="#fff" {...p}><path d="M6 3h13l-1.6 4.2H11l-.7 2.8h6.2l-1.5 4H9.3L7.6 21H3.5z" /></svg>);
+export const IconShare = (p: P) => (<svg viewBox="0 0 24 24" {...s} {...p}><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" /></svg>);

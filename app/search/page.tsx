@@ -6,6 +6,7 @@ import { cleanName } from "@/lib/categories";
 import type { PlayerStats } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Search players" };
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = cleanName((await searchParams).q);
@@ -22,26 +23,27 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   return (
     <>
       <section className="hero">
-        <h1 className="poster">Find a <span className="grad-text">player</span></h1>
-        <p>Search their exact Epic name. You need to find a player here before you can rate them.</p>
-        <SearchBox defaultValue={q} autoFocus={!q} large />
+        <h1>Find a player</h1>
+        <p className="lede">Use their exact Epic name. You have to find someone here before you can rate them.</p>
+        <SearchBox defaultValue={q} autoFocus={!q} />
       </section>
       {q.length > 0 && q.length < 3 && <p className="muted">Type at least 3 characters.</p>}
       {q.length >= 3 && (
         <>
-          {results.length > 0 && (
-            <section className="fade-up">
-              <div className="sec-head"><h2>Results for “{q}”</h2><span className="small faint">{results.length}</span></div>
-              <div className="card flush">{results.map((p) => <PlayerRow key={p.player_id} p={p} />)}</div>
+          {!exact && (
+            <section className="panel cut stack">
+              <div>
+                <span className="label">Not rated yet</span>
+                <h3 style={{ wordBreak: "break-all", marginTop: 4 }}>{q}</h3>
+                <p className="small muted" style={{ margin: "4px 0 0" }}>Check the spelling matches their Epic name, capitals don’t matter. Then be the first to rate them.</p>
+              </div>
+              <Link className="btn full" href={`/rate/${encodeURIComponent(q)}`}>Rate {q}</Link>
             </section>
           )}
-          {!exact && (
-            <section className="card stack fade-up d1">
-              <div>
-                <h3 style={{ wordBreak: "break-all" }}>{q}</h3>
-                <div className="muted small">isn&apos;t on FNRate yet. Make sure the spelling matches their Epic name exactly, then be the first to rate them.</div>
-              </div>
-              <Link className="btn full" href={`/rate/${encodeURIComponent(q)}`}>Be the first to rate {q}</Link>
+          {results.length > 0 && (
+            <section>
+              <div className="sec-head"><h2>{exact ? "Results" : "Similar names"}</h2><span className="small faint">{results.length}</span></div>
+              <div className="panel flush">{results.map((p) => <PlayerRow key={p.player_id} p={p} />)}</div>
             </section>
           )}
         </>

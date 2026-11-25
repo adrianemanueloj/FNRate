@@ -34,7 +34,7 @@ export default function TabBar() {
         {NAV.map(({ href, label, Icon }) => (
           <Link key={href} href={href} className={isOn(path, href) ? "on" : ""} aria-current={isOn(path, href) ? "page" : undefined}>
             <Icon />
-            {label === "Leaderboards" ? "Ranks" : label}
+            {label === "Leaderboards" ? "Boards" : label}
           </Link>
         ))}
       </div>

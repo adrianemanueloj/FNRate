@@ -5,16 +5,21 @@ import TabBar, { TopLinks } from "@/components/TabBar";
 import { LogoMark } from "@/components/Icons";
 import { createClient } from "@/lib/supabase/server";
 
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://fn-rate.vercel.app";
+
 export const metadata: Metadata = {
-  title: "FNRate · Rate your teammates",
-  description: "Search any player and see how good a teammate they really are. Rate toxicity, teamwork, comms and skill.",
+  metadataBase: new URL(SITE),
+  title: { default: "FNRate · Check a teammate before you queue", template: "%s · FNRate" },
+  description: "Look up any Epic name and see how other players rate them: toxicity, teamwork, comms and skill.",
+  openGraph: { siteName: "FNRate", type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0b0c18",
+  themeColor: "#0c0e1a",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -30,14 +35,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
         <header className="top">
           <div className="gut">
             <Link href="/" className="logo" aria-label="FNRate home">
               <span className="mark"><LogoMark /></span>
-              <span>FN<b>Rate</b></span>
+              <span>FN<em>Rate</em></span>
             </Link>
             <TopLinks />
             <div className="acct">
@@ -56,8 +61,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </header>
         <main className="gut">{children}</main>
         <footer>
-          FNRate is a fan project and is not affiliated with or endorsed by Epic Games.
-          <br />Ratings are opinions from other players.
+          <div className="gut">
+            <span>Scores are opinions from other players. Report anything hateful and it gets hidden.</span>
+            <span>FNRate is a fan project, not affiliated with or endorsed by Epic Games.</span>
+          </div>
         </footer>
         <TabBar />
       </body>

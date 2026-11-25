@@ -21,7 +21,7 @@ export default function ReviewItem({ r, voted, back }: { r: Review; voted: boole
             <input type="hidden" name="review_id" value={r.id} />
             <input type="hidden" name="back" value={back} />
             <button className="linkbtn row" style={{ gap: 4 }} type="submit" aria-label="Report this review">
-              <IconFlag className="" /> Report
+              <IconFlag /> Report
             </button>
           </form>
         </span>

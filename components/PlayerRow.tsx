@@ -9,12 +9,12 @@ export default function PlayerRow({ p, rank, stat = "overall", sub }: { p: Playe
   const v = p[stat];
   return (
     <Link href={profileHref(p.epic_name)} className="prow">
-      {rank != null && <span className={`rank${rank <= 3 ? ` r${rank}` : ""}`}>{rank}</span>}
+      {rank != null && <span className={`rank${rank === 1 ? " r1" : ""}`}>{rank}</span>}
       <span className="who">
         <span className="name"><span>{p.epic_name}</span>{p.badge && <Badge />}</span>
-        <span className="small faint">{sub ?? `${p.rating_count} rating${p.rating_count === 1 ? "" : "s"}`}</span>
+        <span className="tiny faint">{sub ?? `${p.rating_count} rating${p.rating_count === 1 ? "" : "s"}`}</span>
       </span>
-      <span className="pill" style={{ color: scoreColor(v) }}>{v ?? "–"}</span>
+      <span className="score" style={{ color: scoreColor(v) }}>{v ?? "–"}</span>
     </Link>
   );
 }

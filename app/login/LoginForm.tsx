@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { createImplicitClient } from "@/lib/supabase/implicit";
 
 export default function LoginForm({ next }: { next: string }) {
   const [email, setEmail] = useState("");
@@ -28,7 +29,10 @@ export default function LoginForm({ next }: { next: string }) {
     e.preventDefault();
     setBusy(true);
     setError(null);
-    const { error } = await createClient().auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo() } });
+    const { error } = await createImplicitClient().auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/auth/hash?next=${encodeURIComponent(next)}` },
+    });
     setBusy(false);
     if (error) setError(friendly(error.message));
     else setSent(true);
@@ -37,7 +41,7 @@ export default function LoginForm({ next }: { next: string }) {
   if (sent) {
     return (
       <div className="notice ok" role="status">
-        Check <b>{email}</b> for a sign-in link. It can take a minute, so check spam too. The link works for one hour.
+        Check <b>{email}</b> for a sign-in link. It can take a minute, so check spam too. The link works for one hour and you can open it in any browser, including the Gmail app.
         <div style={{ marginTop: 8 }}><button className="linkbtn" onClick={() => setSent(false)}>Use a different email</button></div>
       </div>
     );

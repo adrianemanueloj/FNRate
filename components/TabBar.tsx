@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconBolt, IconHome, IconSearch, IconTrophy } from "./Icons";
+import { IconBolt, IconHome, IconSearch, IconTrophy, IconUsers } from "./Icons";
 
 export const NAV = [
   { href: "/", label: "Home", Icon: IconHome },
   { href: "/search", label: "Search", Icon: IconSearch },
   { href: "/leaderboards", label: "Leaderboards", Icon: IconTrophy },
+  { href: "/party", label: "Party", Icon: IconUsers },
   { href: "/premium", label: "Plus", Icon: IconBolt },
 ];
 

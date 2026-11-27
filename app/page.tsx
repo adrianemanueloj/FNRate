@@ -104,6 +104,16 @@ export default async function Home() {
         </div>
       )}
 
+      <section className="panel cut">
+        <div className="spread" style={{ gap: 14, alignItems: "center" }}>
+          <span className="stack" style={{ gap: 2 }}>
+            <h2>Rate your own squad</h2>
+            <span className="small muted">Make a party, invite your friends and rate each other after every match. Only your party sees it.</span>
+          </span>
+          <Link className="btn" href="/party">Party</Link>
+        </div>
+      </section>
+
       {recentList.length > 0 && (
         <section>
           <div className="sec-head"><h2>Just rated</h2></div>

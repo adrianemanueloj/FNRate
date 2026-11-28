@@ -283,11 +283,11 @@ begin
 end;
 $$;
 
--- Leaderboards. Players need at least 3 ratings to show up.
+-- Leaderboards. Players need at least 2 ratings to show up.
 create or replace function public.leaderboard(p_kind text, p_limit int default 25)
 returns setof public.player_stats language sql stable security definer set search_path = public as $$
   select * from public.player_stats s
-  where s.rating_count >= 3
+  where s.rating_count >= 2
   order by
     case p_kind when 'best' then -s.overall when 'toxic' then s.toxicity
                 when 'comms' then -s.comms when 'skill' then -s.skill else -s.overall end,
@@ -533,3 +533,18 @@ from public, anon, authenticated;
 grant execute on function public.create_party(text, text), public.join_party(text, text),
   public.leave_party(uuid), public.my_parties(), public.party_view(uuid), public.rate_party(uuid, jsonb)
 to authenticated;
+
+-- Overall is always the average of toxicity, teamwork, comms and skill.
+create or replace function public.set_overall_average() returns trigger
+language plpgsql as $$
+begin
+  new.overall := round((new.toxicity + new.teamwork + new.comms + new.skill) / 4.0);
+  return new;
+end;
+$$;
+drop trigger if exists ratings_overall_average on public.ratings;
+create trigger ratings_overall_average before insert or update on public.ratings
+  for each row execute function public.set_overall_average();
+drop trigger if exists party_ratings_overall_average on public.party_ratings;
+create trigger party_ratings_overall_average before insert or update on public.party_ratings
+  for each row execute function public.set_overall_average();

@@ -37,7 +37,8 @@ export async function submitRating(_prev: RateState, form: FormData): Promise<Ra
 
   const { error } = await supabase.rpc("submit_rating", {
     p_epic_name: name,
-    p_overall: clampScore(form.get("overall")),
+    // Overall is the average of the four categories (the database enforces this too).
+    p_overall: Math.round(CATEGORIES.reduce((sum, c) => sum + clampScore(form.get(c.key)), 0) / CATEGORIES.length),
     p_toxicity: clampScore(form.get("toxicity")),
     p_teamwork: clampScore(form.get("teamwork")),
     p_comms: clampScore(form.get("comms")),

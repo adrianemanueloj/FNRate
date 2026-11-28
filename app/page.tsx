@@ -52,8 +52,8 @@ export default async function Home() {
       )}
 
       <section className="hero hero-band">
-        <h1>Check a teammate <span className="hl">before you queue</span></h1>
-        <p className="lede">Type an Epic name. See how people who played with them rate their toxicity, teamwork, comms and skill.</p>
+        <h1>Rate your teammates <span className="hl">after the game</span></h1>
+        <p className="lede">Just played with someone? Type their Epic name and rate their toxicity, teamwork, comms and skill.</p>
         <SearchBox />
         <div className="hero-meta">
           {playerCount >= 25 && <span><b>{playerCount.toLocaleString("en-US")}</b> players rated</span>}

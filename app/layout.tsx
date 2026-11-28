@@ -9,8 +9,8 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://fn-rate.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
-  title: { default: "FNRate · Check a teammate before you queue", template: "%s · FNRate" },
-  description: "Look up any Epic name and see how other players rate them: toxicity, teamwork, comms and skill.",
+  title: { default: "FNRate · Rate your teammates after the game", template: "%s · FNRate" },
+  description: "Rate the people you played with after the game: toxicity, teamwork, comms and skill.",
   openGraph: { siteName: "FNRate", type: "website" },
   twitter: { card: "summary_large_image" },
 };

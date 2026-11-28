@@ -60,7 +60,8 @@ export async function rateParty(_prev: PartyState, form: FormData): Promise<Part
     .filter((u) => form.get(`skip_${u}`) !== "on")
     .map((u) => ({
       user_id: u,
-      overall: score(`overall_${u}`), toxicity: score(`toxicity_${u}`), teamwork: score(`teamwork_${u}`),
+      overall: Math.round((score(`toxicity_${u}`) + score(`teamwork_${u}`) + score(`comms_${u}`) + score(`skill_${u}`)) / 4),
+      toxicity: score(`toxicity_${u}`), teamwork: score(`teamwork_${u}`),
       comms: score(`comms_${u}`), skill: score(`skill_${u}`),
     }));
   if (ratings.length === 0) return { error: "Rate at least one teammate, or go back." };

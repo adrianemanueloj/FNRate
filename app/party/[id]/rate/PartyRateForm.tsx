@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import Slider from "@/components/Slider";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, scoreColor } from "@/lib/categories";
 import { rateParty, type PartyState } from "../../actions";
 
 type M = { user_id: string; epic_name: string };
@@ -13,6 +13,7 @@ export default function PartyRateForm({ partyId, members }: { partyId: string; m
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [skip, setSkip] = useState<Record<string, boolean>>({});
   const set = (k: string) => (v: number) => { setVals((o) => ({ ...o, [k]: v })); setTouched((o) => ({ ...o, [k]: true })); };
+  const avg = (u: string) => Math.round(CATEGORIES.reduce((sum, c) => sum + (vals[`${c.key}_${u}`] ?? 50), 0) / CATEGORIES.length);
   const rating = members.filter((m) => !skip[m.user_id]).length;
 
   return (
@@ -33,10 +34,6 @@ export default function PartyRateForm({ partyId, members }: { partyId: string; m
             </div>
             {!off && (
               <>
-                <div className="rate-item">
-                  <Slider name={`overall_${m.user_id}`} label="Overall" low="Worst teammate" high="Best teammate"
-                    value={vals[`overall_${m.user_id}`] ?? 50} touched={!!touched[`overall_${m.user_id}`]} onChange={set(`overall_${m.user_id}`)} />
-                </div>
                 {CATEGORIES.map((c) => {
                   const k = `${c.key}_${m.user_id}`;
                   return (
@@ -45,6 +42,10 @@ export default function PartyRateForm({ partyId, members }: { partyId: string; m
                     </div>
                   );
                 })}
+                <div className="spread" style={{ padding: "12px 0 8px" }}>
+                  <span className="label">Overall (average)</span>
+                  <span className="num" style={{ fontSize: 30, lineHeight: 1, color: scoreColor(avg(m.user_id)) }}>{avg(m.user_id)}</span>
+                </div>
               </>
             )}
           </section>

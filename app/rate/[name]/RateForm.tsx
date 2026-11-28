@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { submitRating, type RateState } from "@/app/actions";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, scoreColor } from "@/lib/categories";
 import { IconPlus } from "@/components/Icons";
 import Slider from "@/components/Slider";
 
@@ -13,7 +13,8 @@ export default function RateForm({ name, leftToday, limit }: { name: string; lef
   const [open, setOpen] = useState<string[]>([]);
   const [text, setText] = useState<Record<string, string>>({});
   const set = (k: string) => (v: number) => { setVals((o) => ({ ...o, [k]: v })); setTouched((o) => ({ ...o, [k]: true })); };
-  const untouched = ["overall", ...CATEGORIES.map((c) => c.key)].filter((k) => !touched[k]).length;
+  const untouched = CATEGORIES.map((c) => c.key).filter((k) => !touched[k]).length;
+  const overall = Math.round(CATEGORIES.reduce((sum, c) => sum + vals[c.key], 0) / CATEGORIES.length);
 
   return (
     <form action={action} className="stack" style={{ gap: 18 }}>
@@ -23,9 +24,6 @@ export default function RateForm({ name, leftToday, limit }: { name: string; lef
       </p>
 
       <section className="panel cut" style={{ paddingBlock: 6 }}>
-        <div className="rate-item">
-          <Slider name="overall" label="Overall" low="Worst teammate" high="Best teammate" value={vals.overall} touched={!!touched.overall} onChange={set("overall")} />
-        </div>
         {CATEGORIES.map((c) => (
           <div key={c.key} className="rate-item">
             <Slider name={c.key} label={c.label} low={c.low} high={c.high} hint={c.ask} value={vals[c.key]} touched={!!touched[c.key]} onChange={set(c.key)} />
@@ -45,10 +43,18 @@ export default function RateForm({ name, leftToday, limit }: { name: string; lef
         ))}
       </section>
 
+      <div className="spread panel" aria-live="polite">
+        <span className="stack" style={{ gap: 0 }}>
+          <span className="label">Overall</span>
+          <span className="tiny faint">Average of the four scores</span>
+        </span>
+        <span className="num" style={{ fontSize: 40, lineHeight: 1, color: untouched === 4 ? "var(--faint)" : scoreColor(overall) }}>{overall}</span>
+      </div>
+
       {state.error && <div className="notice err" role="alert">{state.error}</div>}
 
       <div className="stack" style={{ gap: 8 }}>
-        {untouched > 0 && <span className="untouched">{untouched === 5 ? "Drag the sliders to set your scores." : `${untouched} score${untouched === 1 ? "" : "s"} still at 50.`}</span>}
+        {untouched > 0 && <span className="untouched">{untouched === 4 ? "Drag the sliders to set your scores." : `${untouched} score${untouched === 1 ? "" : "s"} still at 50.`}</span>}
         <button className="btn full" type="submit" disabled={pending}>{pending ? "Saving…" : `Submit rating`}</button>
         <p className="small faint" style={{ margin: 0 }}>Keep reviews about how they played. Slurs are blocked and anyone can report a review.</p>
       </div>

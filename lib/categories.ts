@@ -56,4 +56,4 @@ export const LEADERBOARDS = [
   { key: "skill", label: "Most skilled", stat: "skill", blurb: "Highest skill score" },
 ] as const;
 export type BoardKey = (typeof LEADERBOARDS)[number]["key"];
-export const MIN_RATINGS_FOR_BOARDS = 3;
+export const MIN_RATINGS_FOR_BOARDS = 2;

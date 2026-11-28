@@ -83,8 +83,8 @@ export default async function Home() {
           <h2>How it works</h2>
           <ol className="steps" style={{ marginTop: 12 }}>
             <li><span><b>Search someone you played with</b><span className="muted small">Use their exact Epic name. If nobody has rated them yet, you’ll be first.</span></span></li>
-            <li><span><b>Rate them out of 100</b><span className="muted small">Overall, toxicity, teamwork, comms and skill. Add a short review if you want.</span></span></li>
-            <li><span><b>Climb the boards</b><span className="muted small">Players with 3 or more ratings show up on Best teammates and Most toxic.</span></span></li>
+            <li><span><b>Rate them out of 100</b><span className="muted small">Toxicity, teamwork, comms and skill. Overall is the average. Add a short review if you want.</span></span></li>
+            <li><span><b>Climb the boards</b><span className="muted small">Players with 2 or more ratings show up on Best teammates and Most toxic.</span></span></li>
           </ol>
         </section>
       )}
